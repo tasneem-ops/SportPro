@@ -16,6 +16,10 @@
 		1E3FB9642BF11919005E9300 /* SportProTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3FB9632BF11919005E9300 /* SportProTests.swift */; };
 		1E3FB96E2BF11919005E9300 /* SportProUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3FB96D2BF11919005E9300 /* SportProUITests.swift */; };
 		1E3FB9702BF11919005E9300 /* SportProUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3FB96F2BF11919005E9300 /* SportProUITestsLaunchTests.swift */; };
+		1E3FB97E2BF11938005E9300 /* SportPro.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1E3FB97C2BF11938005E9300 /* SportPro.xcdatamodeld */; };
+		1E3FB9812BF119D1005E9300 /* LocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3FB9802BF119D1005E9300 /* LocalDataSource.swift */; };
+		1E3FB9832BF11A20005E9300 /* League.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3FB9822BF11A20005E9300 /* League.swift */; };
+		1E3FB9862BF11A74005E9300 /* RemoteDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3FB9852BF11A74005E9300 /* RemoteDataSource.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +53,10 @@
 		1E3FB9692BF11919005E9300 /* SportProUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SportProUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1E3FB96D2BF11919005E9300 /* SportProUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportProUITests.swift; sourceTree = "<group>"; };
 		1E3FB96F2BF11919005E9300 /* SportProUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportProUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		1E3FB97D2BF11938005E9300 /* SportPro.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SportPro.xcdatamodel; sourceTree = "<group>"; };
+		1E3FB9802BF119D1005E9300 /* LocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalDataSource.swift; sourceTree = "<group>"; };
+		1E3FB9822BF11A20005E9300 /* League.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = League.swift; sourceTree = "<group>"; };
+		1E3FB9852BF11A74005E9300 /* RemoteDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteDataSource.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +107,8 @@
 		1E3FB94B2BF11918005E9300 /* SportPro */ = {
 			isa = PBXGroup;
 			children = (
+				1E3FB9842BF11A54005E9300 /* Service */,
+				1E3FB97F2BF119B3005E9300 /* DB */,
 				1E3FB94C2BF11918005E9300 /* AppDelegate.swift */,
 				1E3FB94E2BF11918005E9300 /* SceneDelegate.swift */,
 				1E3FB9502BF11918005E9300 /* ViewController.swift */,
@@ -125,6 +135,24 @@
 				1E3FB96F2BF11919005E9300 /* SportProUITestsLaunchTests.swift */,
 			);
 			path = SportProUITests;
+			sourceTree = "<group>";
+		};
+		1E3FB97F2BF119B3005E9300 /* DB */ = {
+			isa = PBXGroup;
+			children = (
+				1E3FB97C2BF11938005E9300 /* SportPro.xcdatamodeld */,
+				1E3FB9802BF119D1005E9300 /* LocalDataSource.swift */,
+				1E3FB9822BF11A20005E9300 /* League.swift */,
+			);
+			path = DB;
+			sourceTree = "<group>";
+		};
+		1E3FB9842BF11A54005E9300 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				1E3FB9852BF11A74005E9300 /* RemoteDataSource.swift */,
+			);
+			path = Service;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -215,6 +243,9 @@
 				Base,
 			);
 			mainGroup = 1E3FB9402BF11918005E9300;
+			packageReferences = (
+				1E3FB9872BF11BB4005E9300 /* XCRemoteSwiftPackageReference "Alamofire" */,
+			);
 			productRefGroup = 1E3FB94A2BF11918005E9300 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -258,8 +289,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E3FB9812BF119D1005E9300 /* LocalDataSource.swift in Sources */,
+				1E3FB9862BF11A74005E9300 /* RemoteDataSource.swift in Sources */,
 				1E3FB9512BF11918005E9300 /* ViewController.swift in Sources */,
 				1E3FB94D2BF11918005E9300 /* AppDelegate.swift in Sources */,
+				1E3FB97E2BF11938005E9300 /* SportPro.xcdatamodeld in Sources */,
+				1E3FB9832BF11A20005E9300 /* League.swift in Sources */,
 				1E3FB94F2BF11918005E9300 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -601,6 +636,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		1E3FB9872BF11BB4005E9300 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.9.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCVersionGroup section */
+		1E3FB97C2BF11938005E9300 /* SportPro.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				1E3FB97D2BF11938005E9300 /* SportPro.xcdatamodel */,
+			);
+			currentVersion = 1E3FB97D2BF11938005E9300 /* SportPro.xcdatamodel */;
+			path = SportPro.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 1E3FB9412BF11918005E9300 /* Project object */;
 }
