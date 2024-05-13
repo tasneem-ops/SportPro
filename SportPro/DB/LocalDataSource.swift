@@ -12,6 +12,7 @@ protocol ILocalDataSource{
     func insert(league : League)
     func deleteLeague(league:League)
     func getAllLeagues(complitionHandler: @escaping ([League]) -> Void)
+    func isFavourite(league: League, complitionHandler: @escaping (Bool) -> Void)
 }
 
 class LocalDataSource : ILocalDataSource{
@@ -23,6 +24,30 @@ class LocalDataSource : ILocalDataSource{
     private init(){
         let delegate = UIApplication.shared.delegate as! AppDelegate
         context = delegate.persistentContainer.viewContext
+    }
+    
+    func isFavourite(league: League, complitionHandler: @escaping (Bool) -> Void) {
+        
+//        guard NSEntityDescription.entity(forEntityName: "LeagueDTO", in: context) != nil else {
+//            return
+//        }
+        
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "LeagueDTO")
+            fetchRequest.predicate = NSPredicate(format: "key == %ld", league.key)
+        
+        
+        do {
+                let leagues = try context.fetch(fetchRequest)
+
+                if let leagueDTO = leagues.first as? NSManagedObject {
+                   complitionHandler(true)
+                } else {
+                    complitionHandler(false)
+                }
+            } catch {
+                print("Error fetching league for deletion: \(error.localizedDescription)")
+            }
+        
     }
     
     func insert(league : League){
@@ -70,9 +95,9 @@ class LocalDataSource : ILocalDataSource{
             }
     }
 
-    
+ 
 
-    
+ 
     func getAllLeagues(complitionHandler: @escaping ([League]) -> Void) {
         var leagues: [League] = []
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "LeagueDTO")
