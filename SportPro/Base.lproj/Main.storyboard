@@ -159,9 +159,12 @@
                                 <rect key="frame" x="325" y="75" width="52" height="34"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="star" catalog="system"/>
+                                <connections>
+                                    <action selector="onFavClicked:" destination="lB8-5G-tmZ" eventType="touchUpInside" id="BIc-UK-uhc"/>
+                                </connections>
                             </button>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="iSO-ve-qEg">
-                                <rect key="frame" x="0.0" y="135" width="393" height="683"/>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="iSO-ve-qEg">
+                                <rect key="frame" x="8" y="135" width="393" height="683"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="IQh-2J-vUs">
                                     <size key="itemSize" width="328" height="200"/>
@@ -336,6 +339,45 @@
                                             <outlet property="homeTeamName" destination="E4a-fr-T7h" id="hyd-Jw-fg4"/>
                                         </connections>
                                     </collectionViewCell>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="teams" id="gve-0b-Rux" customClass="TeamsCollectionViewCell" customModule="SportPro" customModuleProvider="target">
+                                        <rect key="frame" x="118.66666666666667" y="324" width="156" height="194"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="YaP-8U-hYu">
+                                            <rect key="frame" x="0.0" y="0.0" width="156" height="194"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bqT-xv-RND">
+                                                    <rect key="frame" x="28" y="8" width="100" height="100"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="100" id="GXQ-Xg-B5R"/>
+                                                        <constraint firstAttribute="width" constant="100" id="TRY-h4-jvF"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jgg-Qm-Cdh">
+                                                    <rect key="frame" x="16" y="124" width="124" height="24"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="24" id="3uN-dL-YXI"/>
+                                                        <constraint firstAttribute="width" constant="120" id="lff-cn-Ca0"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="jgg-Qm-Cdh" firstAttribute="top" secondItem="bqT-xv-RND" secondAttribute="bottom" constant="16" id="SsO-Z9-ebX"/>
+                                                <constraint firstItem="bqT-xv-RND" firstAttribute="top" secondItem="YaP-8U-hYu" secondAttribute="top" constant="8" id="VCi-cz-IX9"/>
+                                                <constraint firstItem="bqT-xv-RND" firstAttribute="centerX" secondItem="YaP-8U-hYu" secondAttribute="centerX" id="a9m-do-n4L"/>
+                                                <constraint firstItem="jgg-Qm-Cdh" firstAttribute="leading" secondItem="YaP-8U-hYu" secondAttribute="leading" constant="16" id="ovD-hJ-Rkf"/>
+                                                <constraint firstAttribute="trailing" secondItem="jgg-Qm-Cdh" secondAttribute="trailing" constant="16" id="q8e-L3-tnX"/>
+                                            </constraints>
+                                        </collectionViewCellContentView>
+                                        <size key="customSize" width="156" height="194"/>
+                                        <connections>
+                                            <outlet property="teamImage" destination="bqT-xv-RND" id="ark-lY-UE7"/>
+                                            <outlet property="teamName" destination="jgg-Qm-Cdh" id="PZZ-1D-WjJ"/>
+                                        </connections>
+                                    </collectionViewCell>
                                 </cells>
                                 <connections>
                                     <outlet property="dataSource" destination="lB8-5G-tmZ" id="tmy-e1-hsS"/>
@@ -366,6 +408,7 @@
                     </view>
                     <connections>
                         <outlet property="collectionView" destination="iSO-ve-qEg" id="Plh-E1-J4y"/>
+                        <outlet property="favButton" destination="bE6-vg-LQB" id="3ax-03-Afk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DbR-di-tce" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -454,7 +497,7 @@
         <image name="star" catalog="system" width="128" height="116"/>
         <image name="star.fill" catalog="system" width="128" height="116"/>
         <systemColor name="opaqueSeparatorColor">
-            <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

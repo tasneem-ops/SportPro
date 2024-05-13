@@ -25,11 +25,13 @@ class RemoteDataSource<Result : Decodable>: IRemoteDataSource {
                     let json = try JSONDecoder().decode(Result.self, from: data)
                     complitionHandler(json)
                 }catch let error{
+                    print("Error in remote data source")
                     print(error)
                     complitionHandler(nil)
                 }
             }
             else{
+                print("No Data")
                 complitionHandler(nil)
             }
             

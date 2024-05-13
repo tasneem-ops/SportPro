@@ -66,6 +66,7 @@ class AllLeaguesTableViewController: UITableViewController {
             let sportLeague = viewModel?.getLeague(atIndex: indexPath.row)
             let league = League(name: sportLeague?.leagueName ?? "", key: Int16(sportLeague?.leagueKey ?? 0), logoUrl: sportLeague?.leagueLogo ?? "")
             let viewModel = LeagueDetailsViewModel(remoteDataSource: RemoteDataSource<APIResultLeagueEvents>(), localDataSource: LocalDataSource.localDataSource, sportType: viewModel?.sportType ?? .football, league: league)
+            leagueDetailsViewController.viewModel = viewModel
             self.present(leagueDetailsViewController, animated: true)
         }
         
