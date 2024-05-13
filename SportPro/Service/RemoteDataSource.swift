@@ -5,8 +5,8 @@
 //  Created by JETSMobileLabMini9 on 12/05/2024.
 //
 
-import Alamofire
 import Foundation
+import Alamofire
 
 protocol IRemoteDataSource<T>{
     associatedtype T

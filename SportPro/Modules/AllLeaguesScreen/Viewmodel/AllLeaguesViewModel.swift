@@ -10,6 +10,7 @@ class AllLeaguesViewModel {
     var sportType : SportType
     let baseUrl = "https://apiv2.allsportsapi.com/"
     let apiKey = "34e5babdbca7fd35bfc77f1203fcf99808885b0babef7cc966572dc08ae95c2b"
+   
     private var leagueList : [SportLeagues] = []
     
     init(remoteDataSource: any IRemoteDataSource<APIResultSportLeagues>, sportType: SportType) {
