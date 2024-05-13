@@ -11,7 +11,6 @@ class FavoriteLeaguesTableViewController: UITableViewController {
     var viewModel : FavoriteLeaguesViewModel?
     override func viewDidLoad() {
         super.viewDidLoad()
-        //Will Destroy if you don't fix the name!!!
         let cellNib = UINib(nibName: "CustomTableViewCell", bundle: nil)
         tableView.register(cellNib, forCellReuseIdentifier: "cell")
     }
@@ -27,15 +26,15 @@ class FavoriteLeaguesTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+//        return viewModel?.getLeaguesCount() ?? 0
+        return 5
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        //Don't Forget To Cast it to the nib cell class
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomTableViewCell
         let league = viewModel?.getLeague(atIndex: indexPath.row)
-        // cell.myimage.image = league.logo ?? league.countrylogo ?? "static image"
-        //cell.label.text = league.leagueName
+        cell.sportImage.image = UIImage(named: "football")
+        cell.name.text = "Football"
         return cell
     }
 

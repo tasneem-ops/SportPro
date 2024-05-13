@@ -6,13 +6,14 @@
 //
 
 import UIKit
+import Kingfisher
 
 class AllLeaguesTableViewController: UITableViewController {
 
     var viewModel : AllLeaguesViewModel?
     override func viewDidLoad() {
         super.viewDidLoad()
-        //Will Destroy if you don't fix the name!!!
+
         let cellNib = UINib(nibName: "CustomTableViewCell", bundle: nil)
         tableView.register(cellNib, forCellReuseIdentifier: "cell")
     }
@@ -33,19 +34,41 @@ class AllLeaguesTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        //Don't Forget To Cast it to the nib cell class
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomTableViewCell
         let league = viewModel?.getLeague(atIndex: indexPath.row)
-        // cell.myimage.image = league.logo ?? league.countrylogo ?? "static image"
-        //cell.label.text = league.leagueName
+        let url = URL(string: (league?.leagueLogo ?? league?.countryLogo) ?? "")
+        let processor = DownsamplingImageProcessor(size: cell.sportImage.bounds.size)
+                     |> RoundCornerImageProcessor(cornerRadius: 20)
+        cell.sportImage.kf.indicatorType = .activity
+        cell.sportImage.kf.setImage(
+            with: url,
+            placeholder: UIImage(named: "sports"),
+            options: [
+                .processor(processor),
+                .scaleFactor(UIScreen.main.scale),
+                .transition(.fade(1)),
+                .cacheOriginalImage
+            ])
+        {
+            result in
+            switch result {
+            case .success(let value):
+                print("Task done for: \(value.source.url?.absoluteString ?? "")")
+            case .failure(let error):
+                print("Job failed: \(error.localizedDescription)")
+            }
+        }
+        cell.name.text = league?.leagueName
         return cell
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //Present the other viewcontroller league details without
-        //Write this in viewDidLoad of LeagueDetailsScreen
-        //self.modalPresentationStyle = .fullScreen
-        guard let leagueDetailsViewController = self.storyboard?.instantiateViewController(identifier: "leagueDetails") else { return }
-        self.present(leagueDetailsViewController, animated: true)
+        if let leagueDetailsViewController = self.storyboard?.instantiateViewController(identifier: "leagueDetails") as? LeagueDetailsViewController{
+            let sportLeague = viewModel?.getLeague(atIndex: indexPath.row)
+            let league = League(name: sportLeague?.leagueName ?? "", key: Int16(sportLeague?.leagueKey ?? 0), logoUrl: sportLeague?.leagueLogo ?? "")
+            let viewModel = LeagueDetailsViewModel(remoteDataSource: RemoteDataSource<APIResultLeagueEvents>(), localDataSource: LocalDataSource.localDataSource, sportType: viewModel?.sportType ?? .football, league: league)
+            self.present(leagueDetailsViewController, animated: true)
+        }
+        
     }
 
 }
