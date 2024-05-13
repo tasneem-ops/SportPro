@@ -15,6 +15,7 @@ class FavoriteLeaguesTableViewController: UITableViewController {
         tableView.register(cellNib, forCellReuseIdentifier: "cell")
     }
     override func viewWillAppear(_ animated: Bool) {
+        viewModel = FavoriteLeaguesViewModel(localDataSource: LocalDataSource.localDataSource)
         viewModel?.getAllLeagues{
             self.tableView.reloadData()
         }
@@ -26,15 +27,14 @@ class FavoriteLeaguesTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return viewModel?.getLeaguesCount() ?? 0
-        return 5
+        return viewModel?.getLeaguesCount() ?? 0
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomTableViewCell
         let league = viewModel?.getLeague(atIndex: indexPath.row)
-        cell.sportImage.image = UIImage(named: "football")
-        cell.name.text = "Football"
+        cell.sportImage.setCustomImage(image: cell.sportImage, url: URL(string: league?.logoUrl ?? ""))
+        cell.name.text = league?.name
         return cell
     }
 
@@ -44,11 +44,12 @@ class FavoriteLeaguesTableViewController: UITableViewController {
         }
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //Present the other viewcontroller league details without
-        //Write this in viewDidLoad of LeagueDetailsScreen
-        //self.modalPresentationStyle = .fullScreen
-        guard let leagueDetailsViewController = self.storyboard?.instantiateViewController(identifier: "leagueDetails") else { return }
-        self.present(leagueDetailsViewController, animated: true)
+        if let leagueDetailsViewController = self.storyboard?.instantiateViewController(identifier: "leagueDetails") as? LeagueDetailsViewController{
+            guard let league = viewModel?.getLeague(atIndex: indexPath.row) else { return  }
+            let viewModel = LeagueDetailsViewModel(remoteDataSource: RemoteDataSource<APIResultLeagueEvents>(), localDataSource: LocalDataSource.localDataSource, sportType: .football, league: league)
+            leagueDetailsViewController.viewModel = viewModel
+            self.present(leagueDetailsViewController, animated: true)
+        }
     }
     
     func showAlert(row : Int){

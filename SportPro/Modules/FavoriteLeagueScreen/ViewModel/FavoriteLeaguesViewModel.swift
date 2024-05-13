@@ -17,6 +17,7 @@ class FavoriteLeaguesViewModel{
     func getAllLeagues(complitionHandler: @escaping () -> Void){
         localDataSource.getAllLeagues{
             leagues in
+            print(leagues.count)
             self.leagueList = leagues
             complitionHandler()
         }
