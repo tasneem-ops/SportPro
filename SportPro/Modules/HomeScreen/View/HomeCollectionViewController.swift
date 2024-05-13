@@ -45,7 +45,6 @@ class HomeCollectionViewController: UICollectionViewController ,UICollectionView
     // MARK: UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
@@ -62,6 +61,26 @@ class HomeCollectionViewController: UICollectionViewController ,UICollectionView
         cell.sportName.text = homeViewModel.getSports()[indexPath.row].name
         return cell
     }
-
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        var sportType : SportType!
+        switch(indexPath.item){
+        case 0:
+            sportType = .football
+        case 1:
+            sportType = .tennis
+        case 2:
+            sportType = .cricket
+        case 3:
+            sportType = .basketball
+        default:
+            sportType = .football
+        }
+        print(sportType.rawValue)
+        let allLeaguesViewModel = AllLeaguesViewModel(remoteDataSource: RemoteDataSource<APIResultSportLeagues>(), sportType: sportType)
+        if let allLeaguesViewController = self.storyboard?.instantiateViewController(identifier: "allLeagues") as? AllLeaguesTableViewController{
+            allLeaguesViewController.viewModel = allLeaguesViewModel
+            self.navigationController?.pushViewController(allLeaguesViewController, animated: true)
+        }
+    }
 
 }
