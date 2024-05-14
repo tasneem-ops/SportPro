@@ -13,6 +13,7 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
     @IBOutlet weak var favButton: UIButton!
     var viewModel : LeagueDetailsViewModel?
     @IBOutlet weak var collectionView: UICollectionView!
+    var communicator : Communicator?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.modalPresentationStyle = .fullScreen
@@ -75,22 +76,36 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
             cell.leagueNameLabel.text = viewModel?.getUpcomingEventsList()[indexPath.row].leagueName
             cell.eventTimeLabel.text = viewModel?.getUpcomingEventsList()[indexPath.row].eventTime
             cell.eventDateLabel.text = viewModel?.getUpcomingEventsList()[indexPath.row].eventDate
-            cell.awayTeamImage.setCustomImage(image: cell.awayTeamImage, url: URL(string: viewModel?.getUpcomingEventsList()[indexPath.row].awayTeamLogo ?? ""))
-            cell.homeTeamImage.setCustomImage(image: cell.homeTeamImage, url: URL(string: viewModel?.getUpcomingEventsList()[indexPath.row].homeTeamLogo ?? ""))
+            cell.awayTeamImage.setCustomImage(url: URL(string: viewModel?.getUpcomingEventsList()[indexPath.row].awayTeamLogo ?? ""), placeholder: "team")
+            cell.homeTeamImage.setCustomImage( url: URL(string: viewModel?.getUpcomingEventsList()[indexPath.row].homeTeamLogo ?? ""), placeholder: "team")
             return cell
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "pastEvent", for: indexPath) as! PastEventCollectionViewCell
             cell.homeTeamName.text = viewModel?.getPastEventsList()[indexPath.row].eventHomeTeam
             cell.awayTeamName.text = viewModel?.getPastEventsList()[indexPath.row].eventAwayTeam
             cell.eventResultText.text = viewModel?.getPastEventsList()[indexPath.row].eventFinalResult
-            cell.awayTeamImage.setCustomImage(image: cell.awayTeamImage,  url: URL(string: viewModel?.getPastEventsList()[indexPath.row].awayTeamLogo ?? ""))
-            cell.homeTeamImage.setCustomImage(image: cell.homeTeamImage,  url: URL(string: viewModel?.getPastEventsList()[indexPath.row].homeTeamLogo ?? ""))
+            cell.awayTeamImage.setCustomImage(url: URL(string: viewModel?.getPastEventsList()[indexPath.row].awayTeamLogo ?? ""), placeholder: "team")
+            cell.homeTeamImage.setCustomImage(url: URL(string: viewModel?.getPastEventsList()[indexPath.row].homeTeamLogo ?? ""), placeholder: "team")
             return cell
         default:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "teams", for: indexPath) as! TeamsCollectionViewCell
             cell.teamName.text = viewModel?.getTeamsList()[indexPath.row].teamName
-            cell.teamImage.setCustomImage(image: cell.teamImage,  url: URL(string: viewModel?.getTeamsList()[indexPath.row].teamLogo ?? ""))
+            cell.teamImage.setCustomImage(url: URL(string: viewModel?.getTeamsList()[indexPath.row].teamLogo ?? ""), placeholder: "team")
             return cell
+        }
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("will Navigate")
+        print(indexPath.section)
+        if(indexPath.section == 2){
+            print("Correct Section")
+            if let teamDetailViewController = self.storyboard?.instantiateViewController(identifier: "teamDetails") as? TeamDetailsViewController{
+                print("Starting..")
+                self.present(teamDetailViewController, animated: true)
+            }
+            else{
+                print("Couldn't Navigate")
+            }
         }
     }
     func drawTopSection() -> NSCollectionLayoutSection{
@@ -119,14 +134,14 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
     }
     func drawMiddleSection() -> NSCollectionLayoutSection{
         
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.95), heightDimension: .absolute(100))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 50, leading: 8, bottom: 16, trailing: 0)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 8, bottom: 16, trailing: 8)
         section.visibleItemsInvalidationHandler = { (items, offset, environment) in
              items.forEach { item in
              let distanceFromCenter = abs((item.frame.midX - offset.x) - environment.container.contentSize.width / 2.0)
@@ -144,6 +159,7 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
         
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.4), heightDimension: .fractionalHeight(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
+//        item.contentInsets = NSDirectionalEdgeInsets(top: 50, leading: 16, bottom: 16, trailing: 0)
         
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.95), heightDimension: .absolute(160))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
@@ -151,15 +167,15 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuous
         section.contentInsets = NSDirectionalEdgeInsets(top: 50, leading: 16, bottom: 16, trailing: 0)
-//        section.visibleItemsInvalidationHandler = { (items, offset, environment) in
-//             items.forEach { item in
-//             let distanceFromCenter = abs((item.frame.midX - offset.x) - environment.container.contentSize.width / 2.0)
-//             let minScale: CGFloat = 0.8
-//             let maxScale: CGFloat = 1.0
-//             let scale = max(maxScale - (distanceFromCenter / environment.container.contentSize.width), minScale)
-//             item.transform = CGAffineTransform(scaleX: scale, y: scale)
-//             }
-       // }
+        section.visibleItemsInvalidationHandler = { (items, offset, environment) in
+             items.forEach { item in
+             let distanceFromCenter = abs((item.frame.midX - offset.x) - environment.container.contentSize.width / 2.0)
+             let minScale: CGFloat = 0.8
+             let maxScale: CGFloat = 1.0
+             let scale = max(maxScale - (distanceFromCenter / environment.container.contentSize.width), minScale)
+             item.transform = CGAffineTransform(scaleX: scale, y: scale)
+             }
+        }
         
         return section
         
@@ -174,20 +190,20 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
             viewModel?.insertLeague()
             favButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
         }
-        
+        communicator?.updateList()
     }
     
 }
 
 extension UIImageView{
-    func setCustomImage(image : UIImageView, url : URL?){
-        let processor = DownsamplingImageProcessor(size: image.bounds.size)
+    func setCustomImage(url : URL?, placeholder: String){
+        let processor = DownsamplingImageProcessor(size: self.bounds.size)
                      |> RoundCornerImageProcessor(cornerRadius: 20)
-        image.kf.indicatorType = .activity
+        self.kf.indicatorType = .activity
     
-        image.kf.setImage(
+        self.kf.setImage(
             with: url,
-            placeholder: UIImage(named: "sports"),
+            placeholder: UIImage(named: placeholder),
             options: [
                 .processor(processor),
                 .scaleFactor(UIScreen.main.scale),

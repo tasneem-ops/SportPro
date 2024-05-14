@@ -8,30 +8,41 @@
 import UIKit
 
 class TeamDetailsViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+    @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var teamImage: UIImageView!
+    @IBOutlet weak var teamNAme: UILabel!
+    var players : [Players] = []
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        11
+        return players.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! PlayerCollectionViewCell
+        cell.playerImage.setCustomImage(url: URL(string: players[indexPath.row].playerImage ?? ""), placeholder: "player")
         cell.playerImage.makeRounded()
-        cell.playerName.text = "Messi"
+        cell.playerName.text = players[indexPath.row].playerName
         return cell
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         teamImage.makeRounded()
+        RemoteDataSource<APIResultTeams>().fetchData(url: "https://apiv2.allsportsapi.com/football/?met=Teams&teamId=85&APIkey=34e5babdbca7fd35bfc77f1203fcf99808885b0babef7cc966572dc08ae95c2b"){
+            response in
+            self.teamImage.setCustomImage(url: URL(string: response?.result?[0].teamLogo ?? ""), placeholder: "basketball")
+            self.teamNAme.text = response?.result?[0].teamName
+            self.players = response?.result?[0].players ?? []
+            self.collectionView.reloadData()
+        }
     }
 
 }
 
-extension ViewController: UICollectionViewDelegateFlowLayout {
+extension TeamDetailsViewController: UICollectionViewDelegateFlowLayout {
         func collectionView(_ collectionView: UICollectionView,
                             layout collectionViewLayout: UICollectionViewLayout,
                             sizeForItemAt indexPath: IndexPath) -> CGSize {
-            return CGSize(width: 100, height: 300)
+            return CGSize(width: 100, height: 150)
         }
 
         func collectionView(_ collectionView: UICollectionView,
