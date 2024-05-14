@@ -12,6 +12,7 @@ class TeamsCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var teamImage: UIImageView!
     @IBOutlet weak var teamName: UILabel!
     
+    @IBOutlet weak var noTeamsLabel: UILabel!
     override func layoutSubviews() {
         super.layoutSubviews()
         layer.cornerRadius = 10

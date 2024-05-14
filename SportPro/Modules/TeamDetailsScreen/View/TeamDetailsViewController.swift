@@ -11,6 +11,7 @@ class TeamDetailsViewController: UIViewController, UICollectionViewDelegate, UIC
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var teamImage: UIImageView!
     @IBOutlet weak var teamNAme: UILabel!
+    @IBOutlet weak var errorImage: UIImageView!
     var viewModel:TeamDetailsViewModel!
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

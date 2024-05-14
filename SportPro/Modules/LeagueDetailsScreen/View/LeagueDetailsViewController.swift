@@ -14,6 +14,9 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
     var viewModel : LeagueDetailsViewModel?
     @IBOutlet weak var collectionView: UICollectionView!
     var communicator : Communicator?
+    var isNoUpcomingEvents : Bool = false
+    var isNoPastEvents : Bool = false
+    var isNoTeams : Bool = false
     override func viewDidLoad() {
         super.viewDidLoad()
         self.modalPresentationStyle = .fullScreen
@@ -31,9 +34,6 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
         collectionView.setCollectionViewLayout(layout, animated: true)
     }
     override func viewWillAppear(_ animated: Bool) {
-        if(viewModel == nil){
-            print("NILLLLLL")
-        }
         viewModel?.getPastEvents(complitionHandler: {
             print("Data Returned")
             self.collectionView.reloadData()
@@ -56,14 +56,37 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
         return 3
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-       // return 4
         switch section{
         case 0:
-            return viewModel?.getUpcomingEventsCount() ?? 1
+            var count = viewModel?.getUpcomingEventsCount() ?? 0
+            if(count == 0){
+                isNoUpcomingEvents = true
+                count = 1
+            }
+            else{
+                isNoUpcomingEvents = false
+            }
+            return count
         case 1:
-            return viewModel?.getPastEventsCount() ?? 1
+            var count = viewModel?.getPastEventsCount() ?? 0
+            if(count == 0){
+                isNoPastEvents = true
+                count = 1
+            }
+            else{
+                isNoPastEvents = false
+            }
+            return count
         default:
-            return viewModel?.getTeamCount() ?? 1
+            var count = viewModel?.getTeamCount() ?? 0
+            if(count == 0){
+                isNoTeams = true
+                count = 1
+            }
+            else{
+                isNoTeams = false
+            }
+            return count
         }
     }
     
@@ -71,26 +94,72 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
         switch indexPath.section{
         case 0:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "upcomingEvent", for: indexPath) as! UpcomingEventCollectionViewCell
-            cell.homeTeamName.text = viewModel?.getUpcomingEventsList()[indexPath.row].eventHomeTeam
-            cell.awayTeamName.text = viewModel?.getUpcomingEventsList()[indexPath.row].eventAwayTeam
-            cell.leagueNameLabel.text = viewModel?.getUpcomingEventsList()[indexPath.row].leagueName
-            cell.eventTimeLabel.text = viewModel?.getUpcomingEventsList()[indexPath.row].eventTime
-            cell.eventDateLabel.text = viewModel?.getUpcomingEventsList()[indexPath.row].eventDate
-            cell.awayTeamImage.setCustomImage(url: URL(string: viewModel?.getUpcomingEventsList()[indexPath.row].awayTeamLogo ?? ""), placeholder: "team")
-            cell.homeTeamImage.setCustomImage( url: URL(string: viewModel?.getUpcomingEventsList()[indexPath.row].homeTeamLogo ?? ""), placeholder: "team")
+            if(isNoUpcomingEvents){
+                cell.homeTeamName.isHidden = true
+                cell.awayTeamName.isHidden = true
+                cell.leagueNameLabel.isHidden = true
+                cell.eventTimeLabel.isHidden = true
+                cell.eventDateLabel.isHidden = true
+                cell.awayTeamImage.isHidden = true
+                cell.homeTeamImage.isHidden = true
+                cell.noUpcomingEventsLabel.isHidden = false
+            }
+            else{
+                cell.homeTeamName.text = viewModel?.getUpcomingEventsList()[indexPath.row].eventHomeTeam
+                cell.awayTeamName.text = viewModel?.getUpcomingEventsList()[indexPath.row].eventAwayTeam
+                cell.leagueNameLabel.text = viewModel?.getUpcomingEventsList()[indexPath.row].leagueName
+                cell.eventTimeLabel.text = viewModel?.getUpcomingEventsList()[indexPath.row].eventTime
+                cell.eventDateLabel.text = viewModel?.getUpcomingEventsList()[indexPath.row].eventDate
+                cell.awayTeamImage.setCustomImage(url: URL(string: viewModel?.getUpcomingEventsList()[indexPath.row].awayTeamLogo ?? ""), placeholder: "team")
+                cell.homeTeamImage.setCustomImage( url: URL(string: viewModel?.getUpcomingEventsList()[indexPath.row].homeTeamLogo ?? ""), placeholder: "team")
+                cell.homeTeamName.isHidden = false
+                cell.awayTeamName.isHidden = false
+                cell.leagueNameLabel.isHidden = false
+                cell.eventTimeLabel.isHidden = false
+                cell.eventDateLabel.isHidden = false
+                cell.awayTeamImage.isHidden = false
+                cell.homeTeamImage.isHidden = false
+                cell.noUpcomingEventsLabel.isHidden = true
+            }
             return cell
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "pastEvent", for: indexPath) as! PastEventCollectionViewCell
-            cell.homeTeamName.text = viewModel?.getPastEventsList()[indexPath.row].eventHomeTeam
-            cell.awayTeamName.text = viewModel?.getPastEventsList()[indexPath.row].eventAwayTeam
-            cell.eventResultText.text = viewModel?.getPastEventsList()[indexPath.row].eventFinalResult
-            cell.awayTeamImage.setCustomImage(url: URL(string: viewModel?.getPastEventsList()[indexPath.row].awayTeamLogo ?? ""), placeholder: "team")
-            cell.homeTeamImage.setCustomImage(url: URL(string: viewModel?.getPastEventsList()[indexPath.row].homeTeamLogo ?? ""), placeholder: "team")
+            if(isNoPastEvents){
+                cell.homeTeamName.isHidden = true
+                cell.awayTeamName.isHidden = true
+                cell.eventResultText.isHidden = true
+                cell.awayTeamImage.isHidden = true
+                cell.homeTeamImage.isHidden = true
+                cell.noPastEventsLabel.isHidden = false
+            }
+            else{
+                cell.homeTeamName.text = viewModel?.getPastEventsList()[indexPath.row].eventHomeTeam
+                cell.awayTeamName.text = viewModel?.getPastEventsList()[indexPath.row].eventAwayTeam
+                cell.eventResultText.text = viewModel?.getPastEventsList()[indexPath.row].eventFinalResult
+                cell.awayTeamImage.setCustomImage(url: URL(string: viewModel?.getPastEventsList()[indexPath.row].awayTeamLogo ?? ""), placeholder: "team")
+                cell.homeTeamImage.setCustomImage(url: URL(string: viewModel?.getPastEventsList()[indexPath.row].homeTeamLogo ?? ""), placeholder: "team")
+                cell.homeTeamName.isHidden = false
+                cell.awayTeamName.isHidden = false
+                cell.eventResultText.isHidden = false
+                cell.awayTeamImage.isHidden = false
+                cell.homeTeamImage.isHidden = false
+                cell.noPastEventsLabel.isHidden = true
+            }
             return cell
         default:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "teams", for: indexPath) as! TeamsCollectionViewCell
-            cell.teamName.text = viewModel?.getTeamsList()[indexPath.row].teamName
-            cell.teamImage.setCustomImage(url: URL(string: viewModel?.getTeamsList()[indexPath.row].teamLogo ?? ""), placeholder: "team")
+            if(isNoTeams){
+                cell.teamName.isHidden = true
+                cell.teamImage.isHidden = true
+                cell.noTeamsLabel.isHidden = false
+            }
+            else{
+                cell.teamName.text = viewModel?.getTeamsList()[indexPath.row].teamName
+                cell.teamImage.setCustomImage(url: URL(string: viewModel?.getTeamsList()[indexPath.row].teamLogo ?? ""), placeholder: "team")
+                cell.teamName.isHidden = false
+                cell.teamImage.isHidden = false
+                cell.noTeamsLabel.isHidden = true
+            }
             return cell
         }
     }
@@ -157,7 +226,7 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 //        item.contentInsets = NSDirectionalEdgeInsets(top: 50, leading: 16, bottom: 16, trailing: 0)
         
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.95), heightDimension: .absolute(160))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.75), heightDimension: .absolute(160))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)

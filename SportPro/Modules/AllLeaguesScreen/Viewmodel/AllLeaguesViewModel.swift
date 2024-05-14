@@ -10,6 +10,7 @@ class AllLeaguesViewModel {
     var sportType : SportType
     let baseUrl = "https://apiv2.allsportsapi.com/"
     let apiKey = "34e5babdbca7fd35bfc77f1203fcf99808885b0babef7cc966572dc08ae95c2b"
+    var isError : Bool = false
    
     private var leagueList : [SportLeagues] = []
     
@@ -22,7 +23,10 @@ class AllLeaguesViewModel {
         let url = baseUrl + sportType.rawValue + "/?met=Leagues&APIkey=" + apiKey
         
         remoteDataSource.fetchData(url: url){
-            response in
+            response, error in
+            if(error != nil){
+                self.isError = true
+            }
             self.leagueList = response?.result ?? []
             complitionHandler()
         }
