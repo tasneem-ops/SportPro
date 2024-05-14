@@ -35,29 +35,10 @@ class AllLeaguesTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomTableViewCell
+        cell.sportImage.contentMode = .scaleAspectFit
         let league = viewModel?.getLeague(atIndex: indexPath.row)
         let url = URL(string: (league?.leagueLogo ?? league?.countryLogo) ?? "")
-        let processor = DownsamplingImageProcessor(size: cell.sportImage.bounds.size)
-                     |> RoundCornerImageProcessor(cornerRadius: 20)
-        cell.sportImage.kf.indicatorType = .activity
-        cell.sportImage.kf.setImage(
-            with: url,
-            placeholder: UIImage(named: "sports"),
-            options: [
-                .processor(processor),
-                .scaleFactor(UIScreen.main.scale),
-                .transition(.fade(1)),
-                .cacheOriginalImage
-            ])
-        {
-            result in
-            switch result {
-            case .success(let value):
-                print("Task done for: \(value.source.url?.absoluteString ?? "")")
-            case .failure(let error):
-                print("Job failed: \(error.localizedDescription)")
-            }
-        }
+        cell.sportImage.setCustomImage(url: url, placeholder: viewModel?.sportType.rawValue ?? "sports")
         cell.name.text = league?.leagueName
         return cell
     }

@@ -16,10 +16,7 @@ class HomeCollectionViewController: UICollectionViewController ,UICollectionView
         super.viewDidLoad()
         
         homeViewModel = HomeViewModel()
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Register cell classes
+        self.navigationItem.title = "Sports"
         self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
 
         // Do any additional setup after loading the view.
