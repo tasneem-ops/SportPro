@@ -9,6 +9,7 @@ import UIKit
 
 class UpcomingEventCollectionViewCell: UICollectionViewCell {
     
+    @IBOutlet weak var noUpcomingEventsLabel: UILabel!
     @IBOutlet weak var leagueNameLabel: UILabel!
     @IBOutlet weak var homeTeamImage: UIImageView!
     @IBOutlet weak var awayTeamImage: UIImageView!

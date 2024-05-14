@@ -16,6 +16,10 @@ class LeagueDetailsViewModel{
     var isFav:Bool!
     let baseUrl = "https://apiv2.allsportsapi.com/"
     let apiKey = "34e5babdbca7fd35bfc77f1203fcf99808885b0babef7cc966572dc08ae95c2b"
+    
+    var isNoUpcomingEvents : Bool = false
+    var isNoPastEvents : Bool = false
+    var isNoTeams : Bool = false
     init(remoteDataSource: any IRemoteDataSource<APIResultLeagueEvents>, localDataSource: ILocalDataSource, sportType: SportType,league:League) {
         self.remoteDataSource = remoteDataSource
         self.localDataSource = localDataSource
@@ -31,9 +35,16 @@ class LeagueDetailsViewModel{
         let query = subquery + "&to=" + nextYear + "&APIkey=" + apiKey
         let url = baseUrl + sportType.rawValue + "?met=Fixtures&leagueId=" + query
         remoteDataSource.fetchData(url: url){
-            events in
-            print(events?.result?.count)
-            self.upcomingEvents = events?.result ?? []
+            events, error in
+            if(error != nil){
+                self.isNoUpcomingEvents = true
+            }
+            else{
+                if(events?.result?.count == 0){
+                    self.isNoUpcomingEvents = true
+                }
+                self.upcomingEvents = events?.result ?? []
+            }
             complitionHandler()
         }
     }
@@ -45,9 +56,16 @@ class LeagueDetailsViewModel{
         let query = subquery + "&to=" + currentDate + "&APIkey=" + apiKey
         let url = baseUrl + sportType.rawValue + "?met=Fixtures&leagueId=" + query
         remoteDataSource.fetchData(url: url){
-            events in
-            print(events?.result?.count)
-            self.pastEvents = events?.result ?? []
+            events, error in
+            if(error != nil){
+                self.isNoPastEvents = true
+            }
+            else{
+                if(events?.result?.count == 0){
+                    self.isNoPastEvents = true
+                }
+                self.pastEvents = events?.result ?? []
+            }
             complitionHandler()
         }
     }
@@ -60,13 +78,20 @@ class LeagueDetailsViewModel{
         localDataSource.insert(league: self.league)
     }
     func getTeams(complitionHandler: @escaping () -> Void){
-        //https://apiv2.allsportsapi.com/football/?&met=Teams&leagueId=207&APIkey=d2538bc4458303020afacfc7511cb9f5808e36e454a61508dcb8a7ade6984775
         let query = String(league.key) + "&APIkey=" + apiKey
         let url = baseUrl + sportType.rawValue + "?met=Teams&leagueId=" + query
         let remote = RemoteDataSource<APIResultTeams>()
         remote.fetchData(url: url){
-            teams in
-            self.teams = teams?.result ?? []
+            teams, error in
+            if(error != nil){
+                self.isNoTeams = true
+            }
+            else{
+                if(teams?.result?.count == 0){
+                    self.isNoTeams = true
+                }
+                self.teams = teams?.result ?? []
+            }
             complitionHandler()
         }
     }

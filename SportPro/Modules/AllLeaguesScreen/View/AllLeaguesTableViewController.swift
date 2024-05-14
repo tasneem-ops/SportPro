@@ -8,8 +8,10 @@
 import UIKit
 import Kingfisher
 
-class AllLeaguesTableViewController: UITableViewController {
+class AllLeaguesTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
+    @IBOutlet weak var errorImage: UIImageView!
+    @IBOutlet weak var tableView: UITableView!
     var viewModel : AllLeaguesViewModel?
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,22 +20,29 @@ class AllLeaguesTableViewController: UITableViewController {
         tableView.register(cellNib, forCellReuseIdentifier: "cell")
     }
     override func viewWillAppear(_ animated: Bool) {
+        tableView.isHidden = false
+        errorImage.isHidden = true
         viewModel?.getAllLeagues{
-            self.tableView.reloadData()
+            if(self.viewModel?.isError == true){
+                self.errorImage.isHidden = false
+                self.tableView.isHidden = true
+            }
+            else{
+                self.tableView.reloadData()
+            }
         }
     }
-
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel?.getLeaguesCount() ?? 0
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomTableViewCell
         cell.sportImage.contentMode = .scaleAspectFit
         let league = viewModel?.getLeague(atIndex: indexPath.row)
@@ -42,7 +51,7 @@ class AllLeaguesTableViewController: UITableViewController {
         cell.name.text = league?.leagueName
         return cell
     }
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let leagueDetailsViewController = self.storyboard?.instantiateViewController(identifier: "leagueDetails") as? LeagueDetailsViewController{
             let sportLeague = viewModel?.getLeague(atIndex: indexPath.row)
             let league = League(name: sportLeague?.leagueName ?? "", key: Int16(sportLeague?.leagueKey ?? 0), logoUrl: sportLeague?.leagueLogo ?? "")
