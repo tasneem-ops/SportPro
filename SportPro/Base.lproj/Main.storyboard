@@ -151,12 +151,15 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TQA-BW-i7u">
-                                <rect key="frame" x="16" y="118.99999999999999" width="40" height="34.333333333333329"/>
+                                <rect key="frame" x="16" y="75" width="40" height="34.333333333333343"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="chevron.backward" catalog="system"/>
+                                <connections>
+                                    <action selector="onDismiss:" destination="lB8-5G-tmZ" eventType="touchUpInside" id="HbA-QF-kZf"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bE6-vg-LQB">
-                                <rect key="frame" x="325" y="119" width="52" height="34"/>
+                                <rect key="frame" x="325" y="75" width="52" height="34"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="star" catalog="system"/>
                                 <connections>
@@ -414,7 +417,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DbR-di-tce" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3536.6412213740455" y="483.80281690140845"/>
+            <point key="canvasLocation" x="3619" y="492"/>
         </scene>
         <!--Team Details View Controller-->
         <scene sceneID="PwC-K9-Oev">
@@ -566,24 +569,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fLS-8g-BnQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1635.8778625954199" y="-249.29577464788733"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="bNA-du-YIs">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="j8l-3T-SiA" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="IL6-o0-zKL">
-                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="lB8-5G-tmZ" kind="relationship" relationship="rootViewController" id="ZnB-5X-uaS"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="7v7-6N-O8m" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2609.9236641221373" y="483.80281690140845"/>
         </scene>
     </scenes>
     <resources>

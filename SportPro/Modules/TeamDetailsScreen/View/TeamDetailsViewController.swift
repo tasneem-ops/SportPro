@@ -11,29 +11,31 @@ class TeamDetailsViewController: UIViewController, UICollectionViewDelegate, UIC
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var teamImage: UIImageView!
     @IBOutlet weak var teamNAme: UILabel!
-    var players : [Players] = []
+    var viewModel:TeamDetailsViewModel!
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return players.count
+        return viewModel.getPlayersCount()
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! PlayerCollectionViewCell
-        cell.playerImage.setCustomImage(url: URL(string: players[indexPath.row].playerImage ?? ""), placeholder: "player")
+        cell.playerImage.setCustomImage(url: URL(string: viewModel.getTeamDetails().players?[indexPath.row].playerImage ?? ""), placeholder: "player")
         cell.playerImage.makeRounded()
-        cell.playerName.text = players[indexPath.row].playerName
+        cell.playerName.text = viewModel.getTeamDetails().players?[indexPath.row].playerName
         return cell
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         teamImage.makeRounded()
-        RemoteDataSource<APIResultTeams>().fetchData(url: "https://apiv2.allsportsapi.com/football/?met=Teams&teamId=85&APIkey=34e5babdbca7fd35bfc77f1203fcf99808885b0babef7cc966572dc08ae95c2b"){
-            response in
-            self.teamImage.setCustomImage(url: URL(string: response?.result?[0].teamLogo ?? ""), placeholder: "basketball")
-            self.teamNAme.text = response?.result?[0].teamName
-            self.players = response?.result?[0].players ?? []
-            self.collectionView.reloadData()
-        }
+        teamNAme.text = viewModel.getTeamDetails().teamName
+        teamImage.setCustomImage(url: URL(string: viewModel.getTeamDetails().teamLogo ?? ""), placeholder: "Team Logo")
+//        RemoteDataSource<APIResultTeams>().fetchData(url: "https://apiv2.allsportsapi.com/football/?met=Teams&teamId=85&APIkey=34e5babdbca7fd35bfc77f1203fcf99808885b0babef7cc966572dc08ae95c2b"){
+//            response in
+//            self.teamImage.setCustomImage(url: URL(string: response?.result?[0].teamLogo ?? ""), placeholder: "basketball")
+//            self.teamNAme.text = response?.result?[0].teamName
+//            self.players = response?.result?[0].players ?? []
+//            self.collectionView.reloadData()
+//        }
     }
 
 }

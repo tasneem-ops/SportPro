@@ -95,17 +95,13 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
         }
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("will Navigate")
-        print(indexPath.section)
         if(indexPath.section == 2){
-            print("Correct Section")
+            
             if let teamDetailViewController = self.storyboard?.instantiateViewController(identifier: "teamDetails") as? TeamDetailsViewController{
-                print("Starting..")
+                teamDetailViewController.viewModel = TeamDetailsViewModel(teamDetails: viewModel!.getTeamsList()[indexPath.row])
                 self.present(teamDetailViewController, animated: true)
             }
-            else{
-                print("Couldn't Navigate")
-            }
+
         }
     }
     func drawTopSection() -> NSCollectionLayoutSection{
@@ -186,11 +182,19 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
         if(viewModel?.isFav ?? false){
             viewModel?.deleteLeague()
             favButton.setImage(UIImage(systemName: "star"), for: .normal)
+            viewModel?.isFav = false
         }else{
             viewModel?.insertLeague()
             favButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
+            viewModel?.isFav = true
         }
         communicator?.updateList()
+    }
+    
+    
+    @IBAction func onDismiss(_ sender: Any) {
+        self.dismiss(animated: true
+        )
     }
     
 }

@@ -50,6 +50,7 @@
 		BE41F5E42BF2072B007FF137 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = BE41F5E32BF2072B007FF137 /* Alamofire */; };
 		BE41F6282BF24CFA007FF137 /* TeamsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE41F6272BF24CFA007FF137 /* TeamsCollectionViewCell.swift */; };
 		BE41F6292BF26748007FF137 /* LeagueDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EBE3DDB2BF239F80015FF2C /* LeagueDetailsViewController.swift */; };
+		BECE0F512BF34D3100CB966A /* TeamDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BECE0F502BF34D3100CB966A /* TeamDetailsViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -114,6 +115,7 @@
 		BE41F5DE2BF1F6E1007FF137 /* LeagueDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeagueDetailsViewModel.swift; sourceTree = "<group>"; };
 		BE41F5E12BF203EF007FF137 /* Team.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Team.swift; sourceTree = "<group>"; };
 		BE41F6272BF24CFA007FF137 /* TeamsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamsCollectionViewCell.swift; sourceTree = "<group>"; };
+		BECE0F502BF34D3100CB966A /* TeamDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamDetailsViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -270,16 +272,8 @@
 			children = (
 				1E3FB99A2BF120CD005E9300 /* ViewModel */,
 				1E3FB9992BF120C6005E9300 /* View */,
-				1E3FB9982BF120BF005E9300 /* Model */,
 			);
 			path = FavoriteLeagueScreen;
-			sourceTree = "<group>";
-		};
-		1E3FB9982BF120BF005E9300 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		1E3FB9992BF120C6005E9300 /* View */ = {
@@ -377,6 +371,7 @@
 		BE41F5CF2BF1EEC3007FF137 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				BECE0F502BF34D3100CB966A /* TeamDetailsViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -581,6 +576,7 @@
 				1EAA336A2BF2733000F1531E /* TeamDetailsViewController.swift in Sources */,
 				BE41F5D12BF1EEE5007FF137 /* APITeam.swift in Sources */,
 				BE41F5BF2BF1E82E007FF137 /* Sport.swift in Sources */,
+				BECE0F512BF34D3100CB966A /* TeamDetailsViewModel.swift in Sources */,
 				1E3FB94F2BF11918005E9300 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
