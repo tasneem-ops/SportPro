@@ -73,11 +73,21 @@ class HomeCollectionViewController: UICollectionViewController ,UICollectionView
             sportType = .football
         }
         print(sportType.rawValue)
-        let allLeaguesViewModel = AllLeaguesViewModel(remoteDataSource: RemoteDataSource<APIResultSportLeagues>(), sportType: sportType)
-        if let allLeaguesViewController = self.storyboard?.instantiateViewController(identifier: "allLeagues") as? AllLeaguesTableViewController{
-            allLeaguesViewController.viewModel = allLeaguesViewModel
-            self.navigationController?.pushViewController(allLeaguesViewController, animated: true)
+        if(Reachability.isConnectedToNetwork()){
+                    let allLeaguesViewModel = AllLeaguesViewModel(remoteDataSource: RemoteDataSource<APIResultSportLeagues>(), sportType: sportType)
+                    if let allLeaguesViewController = self.storyboard?.instantiateViewController(identifier: "allLeagues") as? AllLeaguesTableViewController{
+                        allLeaguesViewController.viewModel = allLeaguesViewModel
+                        self.navigationController?.pushViewController(allLeaguesViewController, animated: true)
+                    }}
+                else{
+                    self.showNetworkAlert()
         }
     }
+    func showNetworkAlert(){
+           let alert = UIAlertController(title: "Network Alert", message: "No Network available, Please check your networ connection", preferredStyle: UIAlertController.Style.alert)
 
+           let action2 = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default)
+           alert.addAction(action2)
+           self.present(alert, animated: true)
+       }
 }

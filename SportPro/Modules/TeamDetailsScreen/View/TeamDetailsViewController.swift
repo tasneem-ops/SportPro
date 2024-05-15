@@ -30,13 +30,6 @@ class TeamDetailsViewController: UIViewController, UICollectionViewDelegate, UIC
         teamImage.makeRounded()
         teamNAme.text = viewModel.getTeamDetails().teamName
         teamImage.setCustomImage(url: URL(string: viewModel.getTeamDetails().teamLogo ?? ""), placeholder: "Team Logo")
-//        RemoteDataSource<APIResultTeams>().fetchData(url: "https://apiv2.allsportsapi.com/football/?met=Teams&teamId=85&APIkey=34e5babdbca7fd35bfc77f1203fcf99808885b0babef7cc966572dc08ae95c2b"){
-//            response in
-//            self.teamImage.setCustomImage(url: URL(string: response?.result?[0].teamLogo ?? ""), placeholder: "basketball")
-//            self.teamNAme.text = response?.result?[0].teamName
-//            self.players = response?.result?[0].players ?? []
-//            self.collectionView.reloadData()
-//        }
     }
 
 }
