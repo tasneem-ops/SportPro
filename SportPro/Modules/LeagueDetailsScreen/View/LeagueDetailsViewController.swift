@@ -17,6 +17,7 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
     var isNoUpcomingEvents : Bool = false
     var isNoPastEvents : Bool = false
     var isNoTeams : Bool = false
+    let indicator = UIActivityIndicatorView(style: .large)
     override func viewDidLoad() {
         super.viewDidLoad()
         self.modalPresentationStyle = .fullScreen
@@ -34,16 +35,19 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
         collectionView.setCollectionViewLayout(layout, animated: true)
     }
     override func viewWillAppear(_ animated: Bool) {
+        indicator.center = self.view.center
+        indicator.startAnimating()
+        self.view.addSubview(indicator)
         viewModel?.getPastEvents(complitionHandler: {
-            print("Data Returned")
+            self.indicator.stopAnimating()
             self.collectionView.reloadData()
         })
         viewModel?.getUpcomingEvents( complitionHandler: {
-            print("Data Returned")
+            self.indicator.stopAnimating()
             self.collectionView.reloadData()
         })
         viewModel?.getTeams(complitionHandler: {
-            print("Data Returned")
+            self.indicator.stopAnimating()
             self.collectionView.reloadData()
         })
         viewModel?.isFavourite(complitionHandler: { isFav in
@@ -164,14 +168,17 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
         }
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if(indexPath.section == 2){
-            
-            if let teamDetailViewController = self.storyboard?.instantiateViewController(identifier: "teamDetails") as? TeamDetailsViewController{
-                teamDetailViewController.viewModel = TeamDetailsViewModel(teamDetails: viewModel!.getTeamsList()[indexPath.row])
-                self.present(teamDetailViewController, animated: true)
-            }
+        if Reachability.isConnectedToNetwork(){
+                   if(indexPath.section == 2){
 
-        }
+                       if let teamDetailViewController = self.storyboard?.instantiateViewController(identifier: "teamDetails") as? TeamDetailsViewController{
+                           teamDetailViewController.viewModel = TeamDetailsViewModel(teamDetails: viewModel!.getTeamsList()[indexPath.row])
+                           self.present(teamDetailViewController, animated: true)
+                       }
+                   }
+               }else{
+                   self.showNetworkAlertAlert()
+               }
     }
     func drawTopSection() -> NSCollectionLayoutSection{
         
@@ -249,9 +256,7 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
     
     @IBAction func onFavClicked(_ sender: Any) {
         if(viewModel?.isFav ?? false){
-            viewModel?.deleteLeague()
-            favButton.setImage(UIImage(systemName: "star"), for: .normal)
-            viewModel?.isFav = false
+            self.showAlert()
         }else{
             viewModel?.insertLeague()
             favButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
@@ -265,7 +270,29 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
         self.dismiss(animated: true
         )
     }
-    
+    func showNetworkAlertAlert(){
+       let alert = UIAlertController(title: "Network Alert", message: "No Network available, plese check your networ connection", preferredStyle: UIAlertController.Style.alert)
+
+       let action2 = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default)
+       alert.addAction(action2)
+       self.present(alert, animated: true)
+   }
+
+   func showAlert(){
+       let alert = UIAlertController(title: "Delete League", message: "Are you sure you want to delete league from favorite?", preferredStyle: UIAlertController.Style.alert)
+       let action = UIAlertAction(title: "Delete", style: UIAlertAction.Style.default, handler: {_ in
+           self.viewModel?.deleteLeague()
+           self.favButton.setImage(UIImage(systemName: "star"), for: .normal)
+           self.viewModel?.isFav = false
+           self.communicator?.updateList()
+       }
+       )
+       let action2 = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default)
+       alert.addAction(action)
+       alert.addAction(action2)
+       self.present(alert, animated: true)
+   }
+
 }
 
 extension UIImageView{
