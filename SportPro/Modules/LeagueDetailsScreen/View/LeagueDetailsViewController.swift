@@ -17,6 +17,7 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
     var isNoUpcomingEvents : Bool = false
     var isNoPastEvents : Bool = false
     var isNoTeams : Bool = false
+    let indicator = UIActivityIndicatorView(style: .large)
     override func viewDidLoad() {
         super.viewDidLoad()
         self.modalPresentationStyle = .fullScreen
@@ -32,18 +33,24 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
         }
         
         collectionView.setCollectionViewLayout(layout, animated: true)
+        collectionView.register(Header.self, forSupplementaryViewOfKind:
+                                    UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
+
     }
     override func viewWillAppear(_ animated: Bool) {
+        indicator.center = self.view.center
+        indicator.startAnimating()
+        self.view.addSubview(indicator)
         viewModel?.getPastEvents(complitionHandler: {
-            print("Data Returned")
+            self.indicator.stopAnimating()
             self.collectionView.reloadData()
         })
         viewModel?.getUpcomingEvents( complitionHandler: {
-            print("Data Returned")
+            self.indicator.stopAnimating()
             self.collectionView.reloadData()
         })
         viewModel?.getTeams(complitionHandler: {
-            print("Data Returned")
+            self.indicator.stopAnimating()
             self.collectionView.reloadData()
         })
         viewModel?.isFavourite(complitionHandler: { isFav in
@@ -136,8 +143,14 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
                 cell.homeTeamName.text = viewModel?.getPastEventsList()[indexPath.row].eventHomeTeam
                 cell.awayTeamName.text = viewModel?.getPastEventsList()[indexPath.row].eventAwayTeam
                 cell.eventResultText.text = viewModel?.getPastEventsList()[indexPath.row].eventFinalResult
-                cell.awayTeamImage.setCustomImage(url: URL(string: viewModel?.getPastEventsList()[indexPath.row].awayTeamLogo ?? ""), placeholder: "team")
-                cell.homeTeamImage.setCustomImage(url: URL(string: viewModel?.getPastEventsList()[indexPath.row].homeTeamLogo ?? ""), placeholder: "team")
+                if(viewModel?.sportType == .tennis){
+                    cell.awayTeamImage.setCustomImage(url: URL(string: viewModel?.getPastEventsList()[indexPath.row].awayTeamLogo ?? ""), placeholder: "player")
+                    cell.homeTeamImage.setCustomImage(url: URL(string: viewModel?.getPastEventsList()[indexPath.row].homeTeamLogo ?? ""), placeholder: "player")
+                }
+                else{
+                    cell.awayTeamImage.setCustomImage(url: URL(string: viewModel?.getPastEventsList()[indexPath.row].awayTeamLogo ?? ""), placeholder: "team")
+                    cell.homeTeamImage.setCustomImage(url: URL(string: viewModel?.getPastEventsList()[indexPath.row].homeTeamLogo ?? ""), placeholder: "team")
+                }
                 cell.homeTeamName.isHidden = false
                 cell.awayTeamName.isHidden = false
                 cell.eventResultText.isHidden = false
@@ -149,29 +162,47 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
         default:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "teams", for: indexPath) as! TeamsCollectionViewCell
             if(isNoTeams){
-                cell.teamName.isHidden = true
-                cell.teamImage.isHidden = true
-                cell.noTeamsLabel.isHidden = false
+                cell.teamName.text = "No Teams Available"
+                cell.teamImage.image = UIImage(named: "player")
             }
             else{
                 cell.teamName.text = viewModel?.getTeamsList()[indexPath.row].teamName
                 cell.teamImage.setCustomImage(url: URL(string: viewModel?.getTeamsList()[indexPath.row].teamLogo ?? ""), placeholder: "team")
-                cell.teamName.isHidden = false
-                cell.teamImage.isHidden = false
-                cell.noTeamsLabel.isHidden = true
             }
             return cell
         }
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if(indexPath.section == 2){
-            
-            if let teamDetailViewController = self.storyboard?.instantiateViewController(identifier: "teamDetails") as? TeamDetailsViewController{
-                teamDetailViewController.viewModel = TeamDetailsViewModel(teamDetails: viewModel!.getTeamsList()[indexPath.row])
-                self.present(teamDetailViewController, animated: true)
-            }
+        if Reachability.isConnectedToNetwork(){
+                   if(indexPath.section == 2){
 
+                       if let teamDetailViewController = self.storyboard?.instantiateViewController(identifier: "teamDetails") as? TeamDetailsViewController{
+                           teamDetailViewController.viewModel = TeamDetailsViewModel(teamDetails: viewModel!.getTeamsList()[indexPath.row])
+                           self.present(teamDetailViewController, animated: true)
+                       }
+                   }
+               }else{
+                   self.showNetworkAlertAlert()
+               }
+    }
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind:
+        String, at indexPath: IndexPath) -> UICollectionReusableView {
+        if(kind == UICollectionView.elementKindSectionHeader){
+            if let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier:
+                                                                                "header", for: indexPath) as? Header{
+                print("We are good")
+                switch(indexPath.section){
+                case 0:
+                    header.dateLabel.text = "Upcoming Events"
+                case 1:
+                    header.dateLabel.text = "Past Events"
+                default:
+                    header.dateLabel.text = "Teams"
+                }
+                return header
+            }
         }
+            return Header()
     }
     func drawTopSection() -> NSCollectionLayoutSection{
         
@@ -183,7 +214,7 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
         
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuous
-        section.contentInsets = NSDirectionalEdgeInsets(top: 50, leading: 16, bottom: 16, trailing: 0)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 24, leading: 8, bottom: 8, trailing: 0)
         section.visibleItemsInvalidationHandler = { (items, offset, environment) in
              items.forEach { item in
              let distanceFromCenter = abs((item.frame.midX - offset.x) - environment.container.contentSize.width / 2.0)
@@ -193,7 +224,9 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
              item.transform = CGAffineTransform(scaleX: scale, y: scale)
              }
         }
-        
+        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.03))
+        let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+        section.boundarySupplementaryItems = [sectionHeader]
         return section
         
     }
@@ -201,37 +234,29 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
         
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0)
         
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.95), heightDimension: .absolute(100))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 8, bottom: 16, trailing: 8)
-        section.visibleItemsInvalidationHandler = { (items, offset, environment) in
-             items.forEach { item in
-             let distanceFromCenter = abs((item.frame.midX - offset.x) - environment.container.contentSize.width / 2.0)
-             let minScale: CGFloat = 0.8
-             let maxScale: CGFloat = 1.0
-             let scale = max(maxScale - (distanceFromCenter / environment.container.contentSize.width), minScale)
-             item.transform = CGAffineTransform(scaleX: scale, y: scale)
-             }
-        }
-        
+        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 0)
+        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.03))
+        let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+        section.boundarySupplementaryItems = [sectionHeader]
         return section
         
     }
     func drawBottomSection() -> NSCollectionLayoutSection{
         
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.4), heightDimension: .fractionalHeight(1))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.33), heightDimension: .fractionalHeight(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-//        item.contentInsets = NSDirectionalEdgeInsets(top: 50, leading: 16, bottom: 16, trailing: 0)
-        
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.75), heightDimension: .absolute(160))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.95), heightDimension: .absolute(160))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuous
-        section.contentInsets = NSDirectionalEdgeInsets(top: 50, leading: 16, bottom: 16, trailing: 0)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 24, leading: 16, bottom: 16, trailing: 0)
         section.visibleItemsInvalidationHandler = { (items, offset, environment) in
              items.forEach { item in
              let distanceFromCenter = abs((item.frame.midX - offset.x) - environment.container.contentSize.width / 2.0)
@@ -241,17 +266,24 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
              item.transform = CGAffineTransform(scaleX: scale, y: scale)
              }
         }
-        
+        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(36))
+        let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+        section.boundarySupplementaryItems = [sectionHeader]
         return section
         
     }
-    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        switch section {
+                    case 0:
+                        return .zero
+                    default:
+                        return CGSize(width: collectionView.bounds.width, height: 70)
+                    }
+    }
     
     @IBAction func onFavClicked(_ sender: Any) {
         if(viewModel?.isFav ?? false){
-            viewModel?.deleteLeague()
-            favButton.setImage(UIImage(systemName: "star"), for: .normal)
-            viewModel?.isFav = false
+            self.showAlert()
         }else{
             viewModel?.insertLeague()
             favButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
@@ -265,7 +297,29 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
         self.dismiss(animated: true
         )
     }
-    
+    func showNetworkAlertAlert(){
+       let alert = UIAlertController(title: "Network Alert", message: "No Network available, plese check your networ connection", preferredStyle: UIAlertController.Style.alert)
+
+       let action2 = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default)
+       alert.addAction(action2)
+       self.present(alert, animated: true)
+   }
+
+   func showAlert(){
+       let alert = UIAlertController(title: "Delete League", message: "Are you sure you want to delete league from favorite?", preferredStyle: UIAlertController.Style.alert)
+       let action = UIAlertAction(title: "Delete", style: UIAlertAction.Style.default, handler: {_ in
+           self.viewModel?.deleteLeague()
+           self.favButton.setImage(UIImage(systemName: "star"), for: .normal)
+           self.viewModel?.isFav = false
+           self.communicator?.updateList()
+       }
+       )
+       let action2 = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default)
+       alert.addAction(action)
+       alert.addAction(action2)
+       self.present(alert, animated: true)
+   }
+
 }
 
 extension UIImageView{
@@ -293,4 +347,33 @@ extension UIImageView{
             }
         }
     }
+}
+
+class Header: UICollectionReusableView  {
+    override init(frame: CGRect)    {
+    super.init(frame: frame)
+    setupHeaderViews()
+}
+
+let dateLabel: UILabel = {
+    let title = UILabel()
+    title.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+    title.sizeToFit()
+    title.textColor = .black
+    return title
+}()
+
+func setupHeaderViews()   {
+    addSubview(dateLabel)
+
+    dateLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 20).isActive = true
+    dateLabel.topAnchor.constraint(equalTo: topAnchor, constant: 5).isActive = true
+    dateLabel.widthAnchor.constraint(equalToConstant: 80).isActive = true
+    dateLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
+}
+
+
+required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+}
 }

@@ -48,12 +48,16 @@ class FavoriteLeaguesTableViewController: UIViewController, Communicator , UITab
         }
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let leagueDetailsViewController = self.storyboard?.instantiateViewController(identifier: "leagueDetails") as? LeagueDetailsViewController{
-            guard let league = viewModel?.getLeague(atIndex: indexPath.row) else { return  }
-            let viewModel = LeagueDetailsViewModel(remoteDataSource: RemoteDataSource<APIResultLeagueEvents>(), localDataSource: LocalDataSource.localDataSource, sportType: .football, league: league)
-            leagueDetailsViewController.viewModel = viewModel
-            leagueDetailsViewController.communicator = self
-            self.present(leagueDetailsViewController, animated: true)
+        if Reachability.isConnectedToNetwork(){
+                    if let leagueDetailsViewController = self.storyboard?.instantiateViewController(identifier: "leagueDetails") as? LeagueDetailsViewController{
+                        guard let league = viewModel?.getLeague(atIndex: indexPath.row) else { return  }
+                        let viewModel = LeagueDetailsViewModel(remoteDataSource: RemoteDataSource<APIResultLeagueEvents>(), localDataSource: LocalDataSource.localDataSource, sportType: .football, league: league)
+                        leagueDetailsViewController.viewModel = viewModel
+                        leagueDetailsViewController.communicator = self
+                        self.present(leagueDetailsViewController, animated: true)
+                    }}
+                else{
+                    self.showNetworkAlert()
         }
     }
     
@@ -81,5 +85,12 @@ class FavoriteLeaguesTableViewController: UIViewController, Communicator , UITab
                 self.tableView.reloadData()
             }
         }
+    }
+    func showNetworkAlert (){
+        let alert = UIAlertController(title: "Network Alert", message: "No Network available, plese check your networ connection", preferredStyle: UIAlertController.Style.alert)
+
+        let action2 = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default)
+        alert.addAction(action2)
+        self.present(alert, animated: true)
     }
 }
