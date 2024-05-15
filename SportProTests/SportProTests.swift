@@ -18,6 +18,22 @@ final class SportProTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
+    
+    func testFEtchData() throws {
+        let excepectation = expectation(description: "Waiting for api result")
+
+        RemoteDataSource<APIResultSportLeagues>().fetchData(url: "https://apiv2.allsportsapi.com/football/?met=Leagues&APIkey=34e5babdbca7fd35bfc77f1203fcf99808885b0babef7cc966572dc08ae95c2b", complitionHandler: { result,error  in
+            if let error = error {
+                XCTFail()
+            }else{
+                XCTAssertNotNil(result)
+                XCTAssertEqual(result?.result?[0].leagueKey, 4)
+                excepectation.fulfill()
+            }
+        })
+
+     waitForExpectations(timeout: 15)
+    }
     func testExample() throws {
         XCTAssert(2 == 2)
         // This is an example of a functional test case.
