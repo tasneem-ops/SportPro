@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" rowHeight="87" id="rAK-mw-ahZ" customClass="CustomTableViewCell" customModule="SportsApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="87"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rAK-mw-ahZ" id="3Gb-xM-ETx">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="87"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="football" translatesAutoresizingMaskIntoConstraints="NO" id="Wno-J7-TvP">
+                        <rect key="frame" x="16" y="4" width="132" height="79"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="132" id="BhW-xd-LgM"/>
+                            <constraint firstAttribute="height" constant="79" id="VXG-Ga-AMb"/>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="132" id="kuj-Uf-mhf"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Football" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CEm-nm-ZMg">
+                        <rect key="frame" x="180" y="32" width="124" height="23"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="Wno-J7-TvP" secondAttribute="bottom" constant="4" id="8MD-t7-TV8"/>
+                    <constraint firstAttribute="bottom" secondItem="CEm-nm-ZMg" secondAttribute="bottom" constant="32" id="Ank-3y-M7y"/>
+                    <constraint firstAttribute="trailing" secondItem="CEm-nm-ZMg" secondAttribute="trailing" constant="16" id="Mo4-iR-u2E"/>
+                    <constraint firstItem="Wno-J7-TvP" firstAttribute="leading" secondItem="3Gb-xM-ETx" secondAttribute="leading" constant="16" id="aMY-Mb-Ec2"/>
+                    <constraint firstItem="Wno-J7-TvP" firstAttribute="top" secondItem="3Gb-xM-ETx" secondAttribute="top" constant="4" id="cZP-RT-wi0"/>
+                    <constraint firstItem="CEm-nm-ZMg" firstAttribute="leading" secondItem="Wno-J7-TvP" secondAttribute="trailing" constant="32" id="jbm-Wj-JSA"/>
+                    <constraint firstItem="CEm-nm-ZMg" firstAttribute="top" secondItem="3Gb-xM-ETx" secondAttribute="top" constant="32" id="k8x-a3-Vfs"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="w6T-Hw-Dxp"/>
+            <connections>
+                <outlet property="name" destination="CEm-nm-ZMg" id="3Sw-ls-oB1"/>
+                <outlet property="sportImage" destination="Wno-J7-TvP" id="qQl-yx-dPT"/>
+            </connections>
+            <point key="canvasLocation" x="42.748091603053432" y="35.563380281690144"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="football" width="275" height="183"/>
+    </resources>
+</document>
