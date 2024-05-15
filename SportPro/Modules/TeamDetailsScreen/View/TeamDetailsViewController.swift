@@ -13,6 +13,8 @@ class TeamDetailsViewController: UIViewController, UICollectionViewDelegate, UIC
     @IBOutlet weak var teamNAme: UILabel!
     var viewModel:TeamDetailsViewModel!
     
+    
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.getPlayersCount()
     }
@@ -26,6 +28,7 @@ class TeamDetailsViewController: UIViewController, UICollectionViewDelegate, UIC
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         teamImage.makeRounded()
         teamNAme.text = viewModel.getTeamDetails().teamName
         teamImage.setCustomImage(url: URL(string: viewModel.getTeamDetails().teamLogo ?? ""), placeholder: "Team Logo")
