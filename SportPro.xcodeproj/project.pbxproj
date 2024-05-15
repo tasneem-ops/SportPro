@@ -32,6 +32,8 @@
 		1E98D6642BF3420D0026DE1D /* Communicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E98D6632BF3420D0026DE1D /* Communicator.swift */; };
 		1EAA336A2BF2733000F1531E /* TeamDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EAA33692BF2733000F1531E /* TeamDetailsViewController.swift */; };
 		1EAA336C2BF2739500F1531E /* PlayerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EAA336B2BF2739500F1531E /* PlayerCollectionViewCell.swift */; };
+		1EAB24102BF5028C007B9518 /* LeagueEventtennis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EAB240F2BF5028C007B9518 /* LeagueEventtennis.swift */; };
+		1EAB24122BF50305007B9518 /* APIResultLeagueEventTennis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EAB24112BF50305007B9518 /* APIResultLeagueEventTennis.swift */; };
 		1EBE3DD72BF22CF40015FF2C /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 1EBE3DD62BF22CF40015FF2C /* Kingfisher */; };
 		1EBE3DDA2BF238CC0015FF2C /* UpcomingEventCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EBE3DD92BF238CC0015FF2C /* UpcomingEventCollectionViewCell.swift */; };
 		1EBE3DDC2BF239F80015FF2C /* LeagueDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EBE3DDB2BF239F80015FF2C /* LeagueDetailsViewController.swift */; };
@@ -103,6 +105,8 @@
 		1E98D6632BF3420D0026DE1D /* Communicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Communicator.swift; sourceTree = "<group>"; };
 		1EAA33692BF2733000F1531E /* TeamDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamDetailsViewController.swift; sourceTree = "<group>"; };
 		1EAA336B2BF2739500F1531E /* PlayerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerCollectionViewCell.swift; sourceTree = "<group>"; };
+		1EAB240F2BF5028C007B9518 /* LeagueEventtennis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeagueEventtennis.swift; sourceTree = "<group>"; };
+		1EAB24112BF50305007B9518 /* APIResultLeagueEventTennis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIResultLeagueEventTennis.swift; sourceTree = "<group>"; };
 		1EBE3DD92BF238CC0015FF2C /* UpcomingEventCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpcomingEventCollectionViewCell.swift; sourceTree = "<group>"; };
 		1EBE3DDB2BF239F80015FF2C /* LeagueDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeagueDetailsViewController.swift; sourceTree = "<group>"; };
 		1EBE3DDD2BF240DE0015FF2C /* PastEventCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastEventCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -402,6 +406,8 @@
 				BE41F5DA2BF1EFA7007FF137 /* APIResultLeagueEvents.swift */,
 				BE41F5DC2BF1EFD3007FF137 /* LeagueEvent.swift */,
 				BE41F5E12BF203EF007FF137 /* Team.swift */,
+				1EAB240F2BF5028C007B9518 /* LeagueEventtennis.swift */,
+				1EAB24112BF50305007B9518 /* APIResultLeagueEventTennis.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -579,6 +585,7 @@
 				BE41F5DB2BF1EFA7007FF137 /* APIResultLeagueEvents.swift in Sources */,
 				BE41F5DD2BF1EFD3007FF137 /* LeagueEvent.swift in Sources */,
 				BE857CD72BF4A3BC001F965E /* Reachibility.swift in Sources */,
+				1EAB24102BF5028C007B9518 /* LeagueEventtennis.swift in Sources */,
 				1EAA336C2BF2739500F1531E /* PlayerCollectionViewCell.swift in Sources */,
 				BE41F5C52BF1E8DA007FF137 /* HomeCollectionViewCell.swift in Sources */,
 				1EBE3DDC2BF239F80015FF2C /* LeagueDetailsViewController.swift in Sources */,
@@ -592,6 +599,7 @@
 				1E3FB94D2BF11918005E9300 /* AppDelegate.swift in Sources */,
 				1E3FB98E2BF11D6E005E9300 /* AllLeaguesTableViewController.swift in Sources */,
 				1E3FB97E2BF11938005E9300 /* SportPro.xcdatamodeld in Sources */,
+				1EAB24122BF50305007B9518 /* APIResultLeagueEventTennis.swift in Sources */,
 				1E3FB9832BF11A20005E9300 /* League.swift in Sources */,
 				1E3FB9902BF11DA3005E9300 /* AllLeaguesViewModel.swift in Sources */,
 				BE41F5BC2BF1E7B4007FF137 /* HomeViewModel.swift in Sources */,

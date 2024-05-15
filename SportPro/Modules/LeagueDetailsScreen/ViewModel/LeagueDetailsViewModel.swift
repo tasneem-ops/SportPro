@@ -29,45 +29,88 @@ class LeagueDetailsViewModel{
     private var upcomingEvents:[LeagueEvent] = []
     private var pastEvents:[LeagueEvent] = []
     func getUpcomingEvents(complitionHandler: @escaping () -> Void){
-        let currentDate = getCurrentDate()
+        let currentDate = getTomorrow()
         let nextYear = getNextYear()
         let subquery =  String(league.key) + "&from=" + currentDate
         let query = subquery + "&to=" + nextYear + "&APIkey=" + apiKey
         let url = baseUrl + sportType.rawValue + "?met=Fixtures&leagueId=" + query
-        remoteDataSource.fetchData(url: url){
-            events, error in
-            if(error != nil){
-                self.isNoUpcomingEvents = true
-            }
-            else{
-                if(events?.result?.count == 0){
+        switch sportType {
+        case .tennis:
+            RemoteDataSource<APIResultLeagueEventTennis>().fetchData(url: url){
+                events, error in
+                if(error != nil){
                     self.isNoUpcomingEvents = true
                 }
-                self.upcomingEvents = events?.result ?? []
+                else{
+                    if(events?.result?.count == 0){
+                        self.isNoUpcomingEvents = true
+                    }
+                    var myevents : [LeagueEvent] = []
+                    if let tennisEvents  = events?.result{
+                        myevents = self.mapTennisToEvent(tennisEvents: tennisEvents)
+                    }
+                    self.upcomingEvents = myevents
+                }
+                complitionHandler()
             }
-            complitionHandler()
+        default:
+            remoteDataSource.fetchData(url: url){
+                events, error in
+                if(error != nil){
+                    self.isNoUpcomingEvents = true
+                }
+                else{
+                    if(events?.result?.count == 0){
+                        self.isNoUpcomingEvents = true
+                    }
+                    self.upcomingEvents = events?.result ?? []
+                }
+                complitionHandler()
+            }
         }
     }
     
     func getPastEvents(complitionHandler: @escaping () -> Void){
-        let currentDate = getCurrentDate()
+        let currentDate = getYesterday()
         let lastYear = getLastYear()
         let subquery =  String(league.key) + "&from=" + lastYear
         let query = subquery + "&to=" + currentDate + "&APIkey=" + apiKey
         let url = baseUrl + sportType.rawValue + "?met=Fixtures&leagueId=" + query
-        remoteDataSource.fetchData(url: url){
-            events, error in
-            if(error != nil){
-                self.isNoPastEvents = true
-            }
-            else{
-                if(events?.result?.count == 0){
+        switch(sportType){
+        case .tennis:
+            RemoteDataSource<APIResultLeagueEventTennis>().fetchData(url: url){
+                events, error in
+                if(error != nil){
                     self.isNoPastEvents = true
                 }
-                self.pastEvents = events?.result ?? []
+                else{
+                    if(events?.result?.count == 0){
+                        self.isNoPastEvents = true
+                    }
+                    var myevents : [LeagueEvent] = []
+                    if let tennisEvents  = events?.result{
+                        myevents = self.mapTennisToEvent(tennisEvents: tennisEvents)
+                    }
+                    self.pastEvents = myevents
+                }
+                complitionHandler()
             }
-            complitionHandler()
+        default:
+            remoteDataSource.fetchData(url: url){
+                events, error in
+                if(error != nil){
+                    self.isNoPastEvents = true
+                }
+                else{
+                    if(events?.result?.count == 0){
+                        self.isNoPastEvents = true
+                    }
+                    self.pastEvents = events?.result ?? []
+                }
+                complitionHandler()
+            }
         }
+        
     }
     
     func deleteLeague(){
@@ -113,6 +156,24 @@ class LeagueDetailsViewModel{
             complitionHandler(self.isFav)
         }
     }
+    private func mapTennisToEvent(tennisEvents : [LeagueEventTennis]) -> [LeagueEvent]{
+        var myevents : [LeagueEvent] = []
+        for t in tennisEvents{
+            var event = LeagueEvent()
+            event.awayTeamLogo = t.eventSecondPlayerLogo
+            event.eventAwayTeam = t.eventSecondPlayer
+            event.eventHomeTeam = t.eventFirstPlayer
+            event.homeTeamLogo = t.eventFirstPlayerLogo
+            event.leagueName = t.leagueName
+            event.leagueKey = t.leagueKey
+            event.eventFinalResult = t.eventFinalResult
+            event.eventDate = t.eventDate
+            event.eventTime = t.eventTime
+            event.eventKey = t.eventKey
+            myevents.append(event)
+        }
+        return myevents
+    }
 //    func getTeams() ->[Team]{
 //        teams = Set()
 //        upcomingEvents.forEach { event in
@@ -135,7 +196,18 @@ class LeagueDetailsViewModel{
         let currentDate = dateFormatter.string(from: Date())
         return currentDate
     }
-    
+    private func getTomorrow()->String{
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let currentDate = dateFormatter.string(from: Date.tomorrow)
+        return currentDate
+    }
+    private func getYesterday() -> String{
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let currentDate = dateFormatter.string(from: Date.yesterday)
+        return currentDate
+    }
     private func getNextYear() ->String{
         let currentDate = Date()
         let nextYearDate = Calendar.current.date(byAdding: .year, value: 1, to: currentDate)!
@@ -152,12 +224,25 @@ class LeagueDetailsViewModel{
         let lastYearDateString = dateFormatter.string(from: lastYearDate)
         return lastYearDateString
     }
-    
     func getUpcomingEventsCount () -> Int{
         return self.upcomingEvents.count
     }
     
     func getPastEventsCount () -> Int{
         return self.pastEvents.count
+    }
+}
+
+extension Date {
+    static var yesterday: Date { return Date().dayBefore }
+    static var tomorrow:  Date { return Date().dayAfter }
+    var dayBefore: Date {
+        return Calendar.current.date(byAdding: .day, value: -1, to: noon)!
+    }
+    var dayAfter: Date {
+        return Calendar.current.date(byAdding: .day, value: 1, to: noon)!
+    }
+    var noon: Date {
+        return Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: self)!
     }
 }
