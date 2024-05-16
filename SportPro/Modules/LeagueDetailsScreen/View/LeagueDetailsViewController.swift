@@ -162,7 +162,7 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
         default:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "teams", for: indexPath) as! TeamsCollectionViewCell
             if(isNoTeams){
-                cell.teamName.text = "No Teams Available"
+                cell.teamName.text = "No Teams"
                 cell.teamImage.image = UIImage(named: "player")
             }
             else{
@@ -177,8 +177,12 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
                    if(indexPath.section == 2){
 
                        if let teamDetailViewController = self.storyboard?.instantiateViewController(identifier: "teamDetails") as? TeamDetailsViewController{
-                           teamDetailViewController.viewModel = TeamDetailsViewModel(teamDetails: viewModel!.getTeamsList()[indexPath.row])
-                           self.present(teamDetailViewController, animated: true)
+                           if(isNoTeams){
+                           }
+                           else{
+                               teamDetailViewController.viewModel = TeamDetailsViewModel(teamDetails: viewModel!.getTeamsList()[indexPath.row], sportType: viewModel?.sportType)
+                               self.present(teamDetailViewController, animated: true)
+                           }
                        }
                    }
                }else{
@@ -224,7 +228,7 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
              item.transform = CGAffineTransform(scaleX: scale, y: scale)
              }
         }
-        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.03))
+        let headerSize = NSCollectionLayoutSize(widthDimension: .absolute(400), heightDimension: .absolute(20))
         let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
         section.boundarySupplementaryItems = [sectionHeader]
         return section
@@ -241,7 +245,7 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
         
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 0)
-        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.03))
+        let headerSize = NSCollectionLayoutSize(widthDimension: .absolute(400), heightDimension: .absolute(20))
         let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
         section.boundarySupplementaryItems = [sectionHeader]
         return section
@@ -266,19 +270,14 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDelegate, U
              item.transform = CGAffineTransform(scaleX: scale, y: scale)
              }
         }
-        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(36))
+        let headerSize = NSCollectionLayoutSize(widthDimension: .absolute(400), heightDimension: .absolute(20))
         let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
         section.boundarySupplementaryItems = [sectionHeader]
         return section
         
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        switch section {
-                    case 0:
-                        return .zero
-                    default:
-                        return CGSize(width: collectionView.bounds.width, height: 70)
-                    }
+        return CGSize(width: 400, height: 20)
     }
     
     @IBAction func onFavClicked(_ sender: Any) {
@@ -358,7 +357,13 @@ class Header: UICollectionReusableView  {
 let dateLabel: UILabel = {
     let title = UILabel()
     title.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+    title.text = "This is Just The Placeholder."
     title.sizeToFit()
+    title.clipsToBounds = true
+    title.numberOfLines = 1
+    let width = title.widthAnchor.constraint(equalToConstant: 400)
+    width.priority = .defaultHigh
+    width.isActive = true
     title.textColor = .black
     return title
 }()
@@ -367,9 +372,10 @@ func setupHeaderViews()   {
     addSubview(dateLabel)
 
     dateLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 20).isActive = true
-    dateLabel.topAnchor.constraint(equalTo: topAnchor, constant: 5).isActive = true
-    dateLabel.widthAnchor.constraint(equalToConstant: 80).isActive = true
-    dateLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
+    dateLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: 20).isActive = true
+    dateLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10).isActive = true
+    dateLabel.widthAnchor.constraint(equalToConstant: 400).isActive = true
+    dateLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
 }
 
 

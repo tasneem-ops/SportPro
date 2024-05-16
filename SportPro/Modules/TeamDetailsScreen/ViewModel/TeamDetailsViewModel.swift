@@ -12,9 +12,11 @@ import Foundation
 class TeamDetailsViewModel{
     
     private var teamDetails: APITeam
+    var sportType : SportType = .football
     
-    init(teamDetails: APITeam) {
+    init(teamDetails: APITeam, sportType : SportType?) {
         self.teamDetails = teamDetails
+        self.sportType = sportType ?? .football
     }
     
     func getTeamDetails()->APITeam{

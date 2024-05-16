@@ -203,7 +203,7 @@
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="IQh-2J-vUs">
                                     <size key="itemSize" width="328" height="200"/>
-                                    <size key="headerReferenceSize" width="50" height="50"/>
+                                    <size key="headerReferenceSize" width="400" height="50"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
@@ -496,6 +496,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Players Available" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ynm-cg-MUV">
+                                <rect key="frame" x="101.66666666666667" y="604.66666666666663" width="189.66666666666663" height="24"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="football" translatesAutoresizingMaskIntoConstraints="NO" id="fGc-oL-ZeU">
                                 <rect key="frame" x="0.0" y="59" width="393" height="200"/>
                                 <constraints>
@@ -591,9 +597,11 @@
                             <constraint firstItem="aaT-zF-0by" firstAttribute="trailing" secondItem="fGc-oL-ZeU" secondAttribute="trailing" id="Wv3-td-THb"/>
                             <constraint firstItem="lF9-Qs-NE4" firstAttribute="leading" secondItem="mJa-bH-954" secondAttribute="trailing" constant="32" id="aBl-2K-aO7"/>
                             <constraint firstItem="mJa-bH-954" firstAttribute="leading" secondItem="aaT-zF-0by" secondAttribute="leading" constant="16" id="hQ2-9z-cQg"/>
+                            <constraint firstItem="Ynm-cg-MUV" firstAttribute="centerX" secondItem="zV3-Rc-viY" secondAttribute="centerX" id="iHC-Q4-Fsr"/>
                             <constraint firstItem="zV3-Rc-viY" firstAttribute="leading" secondItem="aaT-zF-0by" secondAttribute="leading" constant="8" id="idd-Zk-oxh"/>
                             <constraint firstItem="GKH-L7-mDh" firstAttribute="top" secondItem="mJa-bH-954" secondAttribute="bottom" constant="8" id="kkS-Zy-Unm"/>
                             <constraint firstItem="mJa-bH-954" firstAttribute="top" secondItem="fGc-oL-ZeU" secondAttribute="bottom" constant="16" id="krI-VM-WrL"/>
+                            <constraint firstItem="Ynm-cg-MUV" firstAttribute="centerY" secondItem="zV3-Rc-viY" secondAttribute="centerY" id="nAn-uk-uLc"/>
                             <constraint firstItem="aaT-zF-0by" firstAttribute="trailing" secondItem="lF9-Qs-NE4" secondAttribute="trailing" constant="32" id="pU5-t0-fUK"/>
                             <constraint firstItem="aaT-zF-0by" firstAttribute="trailing" secondItem="zV3-Rc-viY" secondAttribute="trailing" constant="8" id="wbH-77-mok"/>
                         </constraints>
@@ -601,6 +609,8 @@
                     <connections>
                         <outlet property="collectionView" destination="zV3-Rc-viY" id="26j-Bu-h23"/>
                         <outlet property="errorImage" destination="7Sv-XW-2Pi" id="hal-9E-C9a"/>
+                        <outlet property="noPlayersLabel" destination="Ynm-cg-MUV" id="dw3-Rh-hEC"/>
+                        <outlet property="sportImage" destination="fGc-oL-ZeU" id="OgF-Os-b24"/>
                         <outlet property="teamImage" destination="mJa-bH-954" id="X2Z-5S-2xP"/>
                         <outlet property="teamNAme" destination="lF9-Qs-NE4" id="fpa-dz-dfj"/>
                     </connections>
