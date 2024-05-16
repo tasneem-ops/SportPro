@@ -12,6 +12,8 @@ class TeamDetailsViewController: UIViewController, UICollectionViewDelegate, UIC
     @IBOutlet weak var teamImage: UIImageView!
     @IBOutlet weak var teamNAme: UILabel!
     @IBOutlet weak var errorImage: UIImageView!
+    @IBOutlet weak var sportImage: UIImageView!
+    @IBOutlet weak var noPlayersLabel: UILabel!
     var viewModel:TeamDetailsViewModel!
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -29,7 +31,29 @@ class TeamDetailsViewController: UIViewController, UICollectionViewDelegate, UIC
         super.viewDidLoad()
         teamImage.makeRounded()
         teamNAme.text = viewModel.getTeamDetails().teamName
-        teamImage.setCustomImage(url: URL(string: viewModel.getTeamDetails().teamLogo ?? ""), placeholder: "Team Logo")
+        teamImage.setCustomImage(url: URL(string: viewModel.getTeamDetails().teamLogo ?? ""), placeholder: "team")
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        if(viewModel?.getPlayersCount() == 0){
+            noPlayersLabel.isHidden = false
+            collectionView.isHidden = true
+        }
+        else{
+            noPlayersLabel.isHidden = true
+            collectionView.isHidden = false
+        }
+        switch viewModel?.sportType {
+        case .football:
+            sportImage.image = UIImage(named: "football")
+        case .basketball:
+            sportImage.image = UIImage(named: "basketball")
+        case .cricket:
+            sportImage.image = UIImage(named: "cricket")
+        case .tennis:
+            sportImage.image = UIImage(named: "tennis")
+        case nil:
+            sportImage.image = UIImage(named: "noData")
+        }
     }
 
 }
